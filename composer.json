@@ -1,0 +1,16 @@
+{
+    "name": "tasko-products/php-codestyle",
+    "description": "Description of tasko Products GmbH PHP Code Styles & PHP CS Fixer Rulesets",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "TaskoProducts\\Codestyle\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "php": ">=8.0",
+        "friendsofphp/php-cs-fixer": "^3.0.0"
+    }
+}
