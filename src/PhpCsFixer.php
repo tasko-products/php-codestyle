@@ -1,10 +1,7 @@
 <?php
 /**
- * @link            http://www.tasko-products.de/ tasko Products GmbH
- * @copyright       (c) tasko Products GmbH 2022
- * @license         tbd
- * @author          Tobias Lorenz <tobias.lorenz@tasko.de>
- * @version         1.0.0
+ * @copyright   (c) tasko Products GmbH 2021
+ * @license     http://www.opensource.org/licenses/mit-license.html MIT License
  */
 
 declare(strict_types=1);
@@ -20,10 +17,7 @@ class PhpCsFixer
             'phpdoc_align' => [
                 'align' => 'left'
             ],
-            'operator_linebreak' => [
-                'only_booleans' => true,
-                'position' => 'end'
-            ],
+            'operator_linebreak' => true,
             'standardize_increment' => true,
             'single_quote' => true,
             'single_trait_insert_per_statement' => true,
@@ -34,7 +28,9 @@ class PhpCsFixer
             'method_argument_space' => [
                 'keep_multiple_spaces_after_comma' => false
             ],
-            'return_assignment' => true
+            'function_typehint_space' => true,
+            'ordered_imports' => true,
+            'trailing_comma_in_multiline' => ['after_heredoc' => false]
         ];
     }
 
