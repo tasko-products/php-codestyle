@@ -15,7 +15,7 @@ class PhpCsFixer
         return [
             '@PSR12' => true,
             'phpdoc_align' => [
-                'align' => 'left'
+                'align' => 'left',
             ],
             'operator_linebreak' => true,
             'standardize_increment' => true,
@@ -26,11 +26,12 @@ class PhpCsFixer
             'no_unused_imports' => true,
             'no_useless_else' => true,
             'method_argument_space' => [
-                'keep_multiple_spaces_after_comma' => false
+                'keep_multiple_spaces_after_comma' => false,
             ],
             'function_typehint_space' => true,
             'ordered_imports' => true,
-            'trailing_comma_in_multiline' => ['after_heredoc' => false]
+            'trailing_comma_in_multiline' => ['after_heredoc' => false],
+            'multiline_whitespace_before_semicolons' => ['strategy' => 'new_line_for_chained_calls'],
         ];
     }
 
