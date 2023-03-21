@@ -1,7 +1,13 @@
 <?php
 /**
- * @copyright   (c) tasko Products GmbH 2021
- * @license     http://www.opensource.org/licenses/mit-license.html MIT License
+ * @link         http://www.tasko-products.de/ tasko Products GmbH
+ * @copyright    (c) tasko Products GmbH
+ * @license      http://www.opensource.org/licenses/mit-license.html MIT License
+ *
+ * This file is part of tasko-products/php-codestyle.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -10,6 +16,11 @@ namespace TaskoProducts\Codestyle;
 
 class PhpCsFixer
 {
+    public const COPYRIGHT_TASKO = '(c) tasko Products GmbH';
+    public const LICENSE_COMMERCIAL = 'Commercial';
+    public const LICENSE_MIT = 'http://www.opensource.org/licenses'
+        .'/mit-license.html MIT License';
+
     public static function getDefaultRules(): array
     {
         return [
@@ -31,7 +42,59 @@ class PhpCsFixer
             'function_typehint_space' => true,
             'ordered_imports' => true,
             'trailing_comma_in_multiline' => ['after_heredoc' => false],
-            'multiline_whitespace_before_semicolons' => ['strategy' => 'new_line_for_chained_calls'],
+            'multiline_whitespace_before_semicolons' => [
+                'strategy' => 'new_line_for_chained_calls',
+            ],
+        ];
+    }
+
+    public static function getHeaderRule(
+        string $copyright = '(c) tasko Products GmbH',
+        string $license = self::LICENSE_COMMERCIAL,
+        ?string $link = null,
+        ?string $additionalInformation = null,
+    ): array {
+        $fileHeaderComment = <<<'EOF'
+@copyright    %s
+@license      %s
+EOF;
+
+        $fileHeaderComment = sprintf($fileHeaderComment, $copyright, $license);
+
+        if ($link !== null) {
+            $linkHeaderComment = <<<'EOF'
+@link         %s
+%s
+EOF;
+
+            $fileHeaderComment = sprintf(
+                $linkHeaderComment,
+                $link,
+                $fileHeaderComment,
+            );
+        }
+
+        if ($additionalInformation !== null) {
+            $additionalInformationHeaderComment = <<<'EOF'
+%s
+
+%s
+EOF;
+
+            $fileHeaderComment = sprintf(
+                $additionalInformationHeaderComment,
+                $fileHeaderComment,
+                $additionalInformation,
+            );
+        }
+
+        return [
+            'header_comment' => [
+                'header' => $fileHeaderComment,
+                'comment_type' => 'PHPDoc',
+                'location' => 'after_open',
+                'separate' => 'bottom',
+            ],
         ];
     }
 
