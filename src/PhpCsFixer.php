@@ -45,6 +45,9 @@ class PhpCsFixer
             'multiline_whitespace_before_semicolons' => [
                 'strategy' => 'new_line_for_chained_calls',
             ],
+            'no_superfluous_phpdoc_tags' => true,
+            'no_empty_phpdoc' => true,
+            'no_extra_blank_lines' => true,
         ];
     }
 
