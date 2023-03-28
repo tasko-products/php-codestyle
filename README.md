@@ -283,7 +283,7 @@ if (null === $variable) {
     // code here
 }
 ```
-This format helps prevent <ins><b>accidental</b></ins> assignment of null values to variables such as:
+This format helps to prevent <ins><b>accidental</b></ins> assignment of null values to variables such as:
 ```php
 if ($variable = null) {
     
@@ -329,4 +329,14 @@ If a line of code exceeds 80 characters, use the line-breaks accordingly:
     }
 ```
 The use of line breaks and indentation in the second function makes the code more readable and easier to understand, especially when dealing with longer method chains.
+Pay attention, that in this example semicolon is placed on the new line to make it more visible, where is the end fo this chained code expression.
 
+When using the nullsafe operator (or some other) in a chained method, it is necessary to begin the new line with the operator. This ensures that the operator is properly applied to the previous method call in the chain. 
+```php
+// Set the billing address for an invoice
+$invoice->setBillingAddress(
+    $order->getCustomer()
+        ?->getAddress()
+        ?->getBillingAddress()
+);
+```
