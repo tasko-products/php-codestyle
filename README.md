@@ -340,3 +340,5 @@ $invoice->setBillingAddress(
         ?->getBillingAddress()
 );
 ```
+
+more CleanCode principles: https://github.com/piotrplenik/clean-code-php
