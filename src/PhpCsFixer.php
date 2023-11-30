@@ -41,7 +41,14 @@ class PhpCsFixer
             ],
             'function_typehint_space' => true,
             'ordered_imports' => true,
-            'trailing_comma_in_multiline' => ['after_heredoc' => false],
+            'trailing_comma_in_multiline' => [
+                'after_heredoc' => false,
+                'elements' => [
+                    'arguments',
+                    'arrays',
+                    'parameters',
+                ],
+            ],
             'multiline_whitespace_before_semicolons' => [
                 'strategy' => 'new_line_for_chained_calls',
             ],
