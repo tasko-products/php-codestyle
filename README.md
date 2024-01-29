@@ -564,8 +564,8 @@ write readable tests.
 
 As a team, we agreed that the order in which the assertion functions are
 declared is also important. In the tests in the Arrange section, we always start
-with the providing with assertions and their mocks first. This is followed by
-the expects assertions before the initialization of the class under test. Mocks
+with the providing with/without assertions and their mocks. Followed by the
+expects assertions before the initialization of the class under test. Mocks
 that have with/without & expects assertions are an exception. If they occur,
 they should be placed between the with/without assertions and the expects
 assertions. Again, the with and without assertions are defined on the mock
