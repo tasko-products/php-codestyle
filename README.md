@@ -376,7 +376,7 @@ If a line of code exceeds 80 characters, use the line-breaks accordingly:
 **Bad**
 
 ```php
-    private function expectOrderFromUri(MockInterface $someService, SomeOtherClass $otherClass, Order $order): void {
+    private function withOrderFromUri(\Mockery\MockInterface $someService, SomeOtherClass $otherClass, Order $order): void {
         $someService->expects()->getOrderByUri($otherClass->getResource()->getUri())->andReturns($order);
     }
 ```
@@ -384,8 +384,8 @@ If a line of code exceeds 80 characters, use the line-breaks accordingly:
 **Good**
 
 ```php
-    private function expectOrderFromUri(
-        MockInterface $someService,
+    private function withOrderFromUri(
+        \Mockery\MockInterface $someService,
         SomeOtherClass $otherClass,
         Order $order,
     ): void {
@@ -415,6 +415,172 @@ $invoice->setBillingAddress(
         ?->getAddress()
         ?->getBillingAddress()
 );
+```
+
+## Unit tests
+
+Unit tests are to be set up according to the AAA pattern, whereby the areas are
+not labeled. This applies to simple test functions as well as to table-driven
+tests (data providers).
+
+**Bad**
+
+```php
+public function testCalculateTotalPriceForArticles(): void
+{
+    $taxService = \Mockery::mock(TaxServiceInterface::class);
+    $taxService->expects()->getTaxRate()->andReturns(0.19);
+
+    $logger = \Mockery::mock(LoggerInterface::class);
+    $logger
+        ->expects()
+        ->info(
+            'A total price {totalPrice} has been calculated, including a tax portion of {taxRate}%',
+            [
+                'totalPrice' => 51.1581,
+                'taxRate' => 0.19
+            ],
+        )
+    ;
+
+    $this->assertEquals(
+        51.1581,
+        (new PriceCalculationService($taxService, $logger))
+            ->calculateTotalPriceForArticles(
+                [
+                    (new Article)->setPrice(10.00),
+                    (new Article)->setPrice(10.90),
+                    (new Article)->setPrice(10.09),
+                    (new Article)->setPrice(2.00),
+                ],
+            ),
+    );
+}
+```
+
+**Better**
+
+Based on the AAA pattern, the readability of the unit test is now improved by
+separating the essential areas of the test. This separation is achieved through
+groupings that follow a defined order.
+
+At the beginning of a test, all dependencies of the class under test are mocked
+in the Arrange section if the test case requires it - not every test case
+requires mocks.
+
+The Arrange section is followed by the Act section, which initializes the
+parameters required for the test-case. These are placed as close to the method
+under test as possible for better readability and grouping.
+
+```php
+public function testCalculateTotalPriceForArticles(): void
+{
+    $taxService = \Mockery::mock(TaxServiceInterface::class);
+    $taxService->expects()->getTaxRate()->andReturns(0.19);
+
+    $logger = \Mockery::mock(LoggerInterface::class);
+    $logger
+        ->expects()
+        ->info(
+            'A total price {totalPrice} has been calculated, including a tax portion of {taxRate}%',
+            [
+                'totalPrice' => 51.1581,
+                'taxRate' => 0.19
+            ],
+        )
+    ;
+
+    $service = new PriceCalculationService($taxService, $logger);
+
+    $articles = [
+        (new Article)->setPrice(10.00),
+        (new Article)->setPrice(10.90),
+        (new Article)->setPrice(10.09),
+        (new Article)->setPrice(2.00),
+    ];
+
+    $actual = $service->calculateTotalPriceForArticles($articles);
+
+    $this->assertEquals(51.1581, $actual);
+}
+```
+
+**Good**
+
+Creating mocks of classes and configuring function calls can produce very
+large, unreadable code, depending on the complexity of the function parameters. 
+
+To further improve readability and test code reusability, let's take a look at
+our own assertion function syntax.
+
+The assertion functions are divided into **with**, **without**, and **expects**
+assertions. The with and without assertions are always for the case that a
+function of a mock does or does not provide data. These are often used for
+repositories, but there are also examples of API or configuration services.
+
+Finally, there are the expects assertions. These are used for all other actions
+we expect to happen to our mocks. This includes classic interactions like
+sending a message, logging and API calls, i.e. everything that cannot be (well)
+combined linguistically with "with" or "without" - after all, our goal is to
+write readable tests.
+
+As a team, we agreed that the order in which the assertion functions are
+declared is also important. In the tests in the Arrange section, we always start
+with the providing with assertions and their mocks first. This is followed by
+the expects assertions before the initialization of the class under test. Mocks
+that have with/without & expects assertions are an exception. If they occur,
+they should be placed between the with/without assertions and the expects
+assertions. Again, the with and without assertions are defined on the mock
+first, followed by the expects assertions.
+
+It is also worth noting that assertion functions, and in particular with and
+without assertions, can often be provided via repository-specific test traits,
+and can therefore be used across the board in all tests that integrate the
+repositories as dependencies. The same is applicable to info, warning, and
+error log expect assertions.
+
+```php
+public function testCalculateTotalPriceForArticles(): void
+{
+    $taxService = \Mockery::mock(TaxServiceInterface::class);
+    $this->withTaxRate($taxService);
+
+    $logger = \Mockery::mock(LoggerInterface::class);
+    $this->expectsPriceCalculatedInfoLog($logger);
+
+    $service = new PriceCalculationService($taxService, $logger);
+
+    $articles = [
+        (new Article)->setPrice(10.00),
+        (new Article)->setPrice(10.90),
+        (new Article)->setPrice(10.09),
+        (new Article)->setPrice(2.00),
+    ];
+
+    $actual = $service->calculateTotalPriceForArticles($articles);
+
+    $this->assertEquals(51.1581, $actual);
+}
+
+private function withTaxRate(\Mockery\MockInterface $taxService): void
+{
+    $taxService->expects()->getTaxRate()->andReturns(0.19);
+}
+
+private function expectsPriceCalculatedInfoLog(
+    \Mockery\MockInterface $logger,
+): void {
+    $logger
+        ->expects()
+        ->info(
+            'A total price {totalPrice} has been calculated, including a tax portion of {taxRate}%',
+            [
+                'totalPrice' => 51.1581,
+                'taxRate' => 0.19
+            ],
+        )
+    ;
+}
 ```
 
 more CleanCode principles: https://github.com/piotrplenik/clean-code-php
