@@ -621,4 +621,109 @@ private function expectsPriceCalculatedInfoLog(
 }
 ```
 
+## Trailing commas
+
+Based on PER Coding Styles 2.0, we use trailing commas for related multiline
+statements such as function parameters, function calls, and arrays.
+
+This gives us several advantages. The first advantage is probably a bit
+surprising at first glance: we get a more consistent and clearer syntax. For all
+related multiline statements, there is only one rule - indent and append a
+comma. Not like before, where this rule applied to all lines except the last.
+Without a trailing comma, it is more difficult for colleagues, one of whom adds
+trailing commas and the other does not, as well as for code style fixers who
+have to correct a more complex set of rules.
+
+Another advantage of trailing commas is that it simplifies versioning and code
+review. When additional lines are added using trailing commas, there is only one
+diff on one line instead of two lines.
+
+**Bad array**
+
+```php
+$handbags = [
+    'Hermes Birkin',
+    'Chanel 2.55',
+    'Louis Vuitton Speedy'
+];
+```
+
+**Good array**
+
+```php
+$handbags = [
+    'Hermes Birkin',
+    'Chanel 2.55',
+    'Louis Vuitton Speedy',
+];
+```
+
+**Bad function declaration**
+
+```php
+/**
+ * @param string ...$other
+ */
+function compareHandbags(
+    string $handbag,
+    ...$other
+) {
+    // compare logic
+}
+```
+
+**Good function declaration**
+
+```php
+/**
+ * @param string ...$other
+ */
+function compareHandbags(
+    string $handbag,
+    ...$other,
+) {
+    // compare logic
+}
+```
+
+**Bad function call**
+
+```php
+compareHandbags(
+    'Prada Galleria',
+    'Dior Saddle',
+    'Gucci Dionysus'
+);
+```
+
+**Good function call**
+
+```php
+compareHandbags(
+    'Prada Galleria',
+    'Dior Saddle',
+    'Gucci Dionysus',
+);
+```
+
+**Bad match**
+
+```php
+$recommendation = match ($userPreference) {
+    'classic' => 'Chanel 2.55',
+    'modern' => 'Stella McCartney Falabella',
+    'versatile' => 'Louis Vuitton Neverfull'
+};
+```
+
+**Good match**
+
+```php
+$recommendation = match ($userPreference) {
+    'classic' => 'Chanel 2.55',
+    'modern' => 'Stella McCartney Falabella',
+    'versatile' => 'Louis Vuitton Neverfull',
+};
+```
+
 more CleanCode principles: https://github.com/piotrplenik/clean-code-php
