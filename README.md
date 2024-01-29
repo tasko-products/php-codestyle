@@ -417,6 +417,44 @@ $invoice->setBillingAddress(
 );
 ```
 
+### Long strings - an exception
+
+However, we do not apply this rule to long strings. The reason for this is that
+breaking long strings into several short strings makes them much harder to find,
+especially when it comes to log messages. For practical reasons, we refrain
+from using more readable and accessible code at this point.
+
+**Bad**
+
+```php
+private function doSomething(Some $thing, string $callerId): void
+{
+    $this->logger->info(
+        'Something really important happented within {something}, triggered'
+        . 'from caller {callerId}',
+        [
+            'something' => $thing->getName(),
+            'callerId' => $callerId,
+        ],
+    );
+}
+```
+
+**Good**
+
+```php
+private function doSomething(Some $thing, string $callerId): void
+{
+    $this->logger->info(
+        'Something really important happented within {something}, triggered from caller {callerId}',
+        [
+            'something' => $thing->getName(),
+            'callerId' => $callerId,
+        ],
+    );
+}
+```
+
 ## Unit tests
 
 Unit tests are to be set up according to the AAA pattern, whereby the areas are
