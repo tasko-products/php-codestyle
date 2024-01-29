@@ -376,25 +376,25 @@ If a line of code exceeds 80 characters, use the line-breaks accordingly:
 **Bad**
 
 ```php
-    private function withOrderFromUri(\Mockery\MockInterface $someService, SomeOtherClass $otherClass, Order $order): void {
-        $someService->expects()->getOrderByUri($otherClass->getResource()->getUri())->andReturns($order);
-    }
+private function withOrderFromUri(\Mockery\MockInterface $someService, SomeOtherClass $otherClass, Order $order): void {
+    $someService->expects()->getOrderByUri($otherClass->getResource()->getUri())->andReturns($order);
+}
 ```
 
 **Good**
 
 ```php
-    private function withOrderFromUri(
-        \Mockery\MockInterface $someService,
-        SomeOtherClass $otherClass,
-        Order $order,
-    ): void {
-        $someService
-            ->expects()
-            ->getOrderByUri($otherClass->getResource()->getUri())
-            ->andReturns($order)
-        ;
-    }
+private function withOrderFromUri(
+    \Mockery\MockInterface $someService,
+    SomeOtherClass $otherClass,
+    Order $order,
+): void {
+    $someService
+        ->expects()
+        ->getOrderByUri($otherClass->getResource()->getUri())
+        ->andReturns($order)
+    ;
+}
 ```
 
 The use of line breaks and indentation in the second function makes the code
@@ -476,7 +476,7 @@ public function testCalculateTotalPriceForArticles(): void
             'A total price {totalPrice} has been calculated, including a tax portion of {taxRate}%',
             [
                 'totalPrice' => 51.1581,
-                'taxRate' => 0.19
+                'taxRate' => 0.19,
             ],
         )
     ;
@@ -523,7 +523,7 @@ public function testCalculateTotalPriceForArticles(): void
             'A total price {totalPrice} has been calculated, including a tax portion of {taxRate}%',
             [
                 'totalPrice' => 51.1581,
-                'taxRate' => 0.19
+                'taxRate' => 0.19,
             ],
         )
     ;
@@ -614,7 +614,7 @@ private function expectsPriceCalculatedInfoLog(
             'A total price {totalPrice} has been calculated, including a tax portion of {taxRate}%',
             [
                 'totalPrice' => 51.1581,
-                'taxRate' => 0.19
+                'taxRate' => 0.19,
             ],
         )
     ;
