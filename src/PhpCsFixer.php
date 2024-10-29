@@ -55,6 +55,8 @@ class PhpCsFixer
             'no_superfluous_phpdoc_tags' => true,
             'no_empty_phpdoc' => true,
             'no_extra_blank_lines' => true,
+            'strict_comparison' => true,
+            'strict_param' => true,
         ];
     }
 
